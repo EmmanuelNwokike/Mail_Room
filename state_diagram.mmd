@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> Created
+
+    Created --> Pending: recordDeliveredPackage(knownResident)
+    Created --> Unknown: recordUnknownPackage(nonResident)
+
+    Pending --> PickedUp: markPackagePickedUp()
+    Pending --> ReturnedToSender: returnAfterDeadline()
+
+    Unknown --> ReturnedToSender: returnUnknownPackage()
+
+    PickedUp --> [*]
+    ReturnedToSender --> [*]
