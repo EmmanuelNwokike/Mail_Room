@@ -1,0 +1,31 @@
+flowchart LR
+    %% === Styles ===
+    classDef actor fill=#ffffff,stroke=#000000,stroke-width=1px;
+    classDef usecase fill=#e0e7ff,stroke=#000000,stroke-width=1px,rx=30,ry=30;
+
+    %% === Actors ===
+    StaffUser[":StaffUser:"]:::actor
+    EmailSystem[":Email System:"]:::actor
+
+    %% === Use Cases ===
+    UC_Login(["Login"]):::usecase
+    UC_RecordDelivered(["Record Delivered Package"]):::usecase
+    UC_RecordUnknown(["Record Unknown Package"]):::usecase
+    UC_MarkPickedUp(["Mark Package as Picked Up"]):::usecase
+    UC_RetrieveHistory(["Retrieve Package History"]):::usecase
+    UC_ViewPendingUnknown(["View Pending & Unknown Packages"]):::usecase
+    UC_SendNotification(["Send Notification Email"]):::usecase
+
+    %% === Associations (StaffUser) ===
+    StaffUser --> UC_Login
+    StaffUser --> UC_RecordDelivered
+    StaffUser --> UC_RecordUnknown
+    StaffUser --> UC_MarkPickedUp
+    StaffUser --> UC_RetrieveHistory
+    StaffUser --> UC_ViewPendingUnknown
+
+    %% === Include / Collaboration ===
+    UC_RecordDelivered --> UC_SendNotification
+
+    %% === Email System related ===
+    EmailSystem --> UC_SendNotification
