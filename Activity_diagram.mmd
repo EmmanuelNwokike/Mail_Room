@@ -1,0 +1,27 @@
+flowchart TD
+    %% === Start / End ===
+    Start([Start])
+    End([End])
+
+    %% === Activities ===
+    A_Login[Staff is logged in]
+    A_OpenForm[Open 'New Delivered Package' form]
+    A_EnterSearch[Enter resident name or unit number]
+    A_SearchDB[System searches Resident database]
+    D_Found{Resident found?}
+    A_SelectResident[Staff selects matched resident]
+    A_SelectCarrier[Select carrier and enter tracking number]
+    A_CreatePackage[System creates Package with status = PENDING]
+    A_AddToPending[Add package to Pending Area]
+    A_SendEmail[Send notification email to resident]
+    A_ShowSuccess[Show success message to staff]
+
+    A_SuggestUnknown[Show message: 'Resident not found – record as Unknown package']
+
+    %% === Flow ===
+    Start --> A_Login --> A_OpenForm --> A_EnterSearch --> A_SearchDB --> D_Found
+
+    D_Found -->|Yes| A_SelectResident --> A_SelectCarrier --> A_CreatePackage
+    A_CreatePackage --> A_AddToPending --> A_SendEmail --> A_ShowSuccess --> End
+
+    D_Found -->|No| A_SuggestUnknown --> End
