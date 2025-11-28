@@ -23,17 +23,17 @@ classDiagram
         +DateTime pickupDate
         +PackageStatus status
         +string labelName
-        +Resident resident  // optional: null if UNKNOWN
+        +Resident resident
     }
 
-    enum CarrierType {
+    class CarrierType {
         USPS
         UPS
         FedEx
         Other
     }
 
-    enum PackageStatus {
+    class PackageStatus {
         PENDING
         UNKNOWN
         PICKED_UP
@@ -45,9 +45,9 @@ classDiagram
         +Package recordDeliveredPackage(int residentId, CarrierType carrier, string trackingNumber, string labelName)
         +Package recordUnknownPackage(string labelName, CarrierType carrier, DateTime deliveryDate)
         +void markPackagePickedUp(int packageId)
-        +List~Package~ getPackageHistory(string residentName, int unitNumber)
-        +List~Package~ getPendingPackages()
-        +List~Package~ getUnknownPackages()
+        +Package[] getPackageHistory(string residentName, int unitNumber)
+        +Package[] getPendingPackages()
+        +Package[] getUnknownPackages()
     }
 
     %% === Email Service ===
@@ -66,20 +66,20 @@ classDiagram
 
     %% === Repositories / Data Access Layer ===
     class ResidentRepository {
-        +Resident~?~ findByNameAndUnit(string fullName, int unitNumber)
-        +Resident~?~ findById(int id)
+        +Resident findByNameAndUnit(string fullName, int unitNumber)
+        +Resident findById(int id)
     }
 
     class StaffRepository {
-        +StaffUser~?~ findByUsername(string username)
+        +StaffUser findByUsername(string username)
     }
 
     class PackageRepository {
         +void save(Package package)
-        +Package~?~ findById(int id)
-        +List~Package~ findPending()
-        +List~Package~ findUnknown()
-        +List~Package~ findHistoryByResident(string residentName, int unitNumber)
+        +Package findById(int id)
+        +Package[] findPending()
+        +Package[] findUnknown()
+        +Package[] findHistoryByResident(string residentName, int unitNumber)
     }
 
     %% === Relationships ===
@@ -91,3 +91,4 @@ classDiagram
     MailroomSystem --> EmailService : uses
 
     SmtpEmailService ..|> EmailService
+
