@@ -1,0 +1,28 @@
+sequenceDiagram
+    actor StaffUser as StaffUser
+    participant UI as UI/Form
+    participant Mailroom as MailroomSystem
+    participant ResRepo as ResidentRepository
+    participant PackRepo as PackageRepository
+    participant EmailSvc as EmailService
+
+    StaffUser->>UI: Click "Record Delivered Package"
+    UI->>Mailroom: recordDeliveredPackageRequest(labelName, unitOrName, carrier, trackingNumber)
+
+    Mailroom->>ResRepo: findByNameOrUnit(fullName, unitNumber)
+    ResRepo-->>Mailroom: resident / null
+
+    alt Resident found
+        Mailroom->>Mailroom: create Package(status = PENDING)
+        Mailroom->>PackRepo: save(package)
+        PackRepo-->>Mailroom: confirm
+
+        Mailroom->>EmailSvc: sendPackageNotification(resident, package)
+        EmailSvc-->>Mailroom: emailSent confirmation
+
+        Mailroom-->>UI: success + package details
+        UI-->>StaffUser: show "Package recorded and email sent"
+    else Resident not found
+        Mailroom-->>UI: error "Resident not found"
+        UI-->>StaffUser: suggest Record Unknown Package
+    end
