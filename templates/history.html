@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Package History</h2>
+
+<form method="post" action="{{ url_for('history') }}" class="row g-3 mt-2 mb-4">
+    <div class="col-md-5">
+        <label class="form-label">Resident Full Name</label>
+        <input type="text" name="resident_name" class="form-control"
+               value="{{ resident_name }}" placeholder="Kittie Mousdall">
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Unit Number</label>
+        <input type="number" name="unit_number" class="form-control"
+               value="{{ unit_number }}" placeholder="101">
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+{% if packages %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Package ID</th>
+                <th>Status</th>
+                <th>Label Name</th>
+                <th>Carrier</th>
+                <th>Tracking #</th>
+                <th>Delivered At</th>
+                <th>Picked Up At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pkg in packages %}
+                <tr>
+                    <td>{{ pkg.id }}</td>
+                    <td>{{ pkg.status }}</td>
+                    <td>{{ pkg.label_name }}</td>
+                    <td>{{ pkg.carrier }}</td>
+                    <td>{{ pkg.tracking_number or "-" }}</td>
+                    <td>{{ pkg.delivery_date }}</td>
+                    <td>{{ pkg.pickup_date or "-" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

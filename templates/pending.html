@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="d-flex justify-content-between align-items-center">
+    <span>Pending Packages</span>
+    <span>
+        <a href="{{ url_for('new_package') }}" class="btn btn-sm btn-success">
+            + New Delivered Package
+        </a>
+        <a href="{{ url_for('new_unknown_package') }}" class="btn btn-sm btn-outline-info ms-2">
+            + Unknown Package
+        </a>
+        <a href="{{ url_for('history') }}" class="btn btn-sm btn-outline-secondary ms-2">
+            View History
+        </a>
+        <a href="{{ url_for('unknown_packages') }}" class="btn btn-sm btn-outline-info ms-2">
+            View Unknown Packages
+        </a>
+
+    </span>
+</h2>
+
+
+{% if packages %}
+    <table class="table table-striped mt-3">
+
+        
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Resident Name</th>
+                <th>Unit</th>
+                <th>Label Name</th>
+                <th>Carrier</th>
+                <th>Tracking #</th>
+                <th>Delivered At</th>
+                <th>Actions</th>
+             </tr>
+        </thead>
+
+        <tbody>
+            {% for pkg in packages %}
+                <tr>
+                    <td>{{ pkg.id }}</td>
+                    <td>{{ pkg.resident.full_name if pkg.resident else "Unknown" }}</td>
+                    <td>{{ pkg.resident.unit_number if pkg.resident else "-" }}</td>
+                    <td>{{ pkg.label_name }}</td>
+                    <td>{{ pkg.carrier }}</td>
+                    <td>{{ pkg.tracking_number or "-" }}</td>
+                    <td>{{ pkg.delivery_date }}</td>
+                    <td>
+                        <form method="post" action="{{ url_for('pickup_package', package_id=pkg.id) }}">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Mark as Picked Up
+                            </button>
+                        </form>
+                    </td>                       
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="mt-3">There are no pending packages right now.</p>
+{% endif %}
+{% endblock %}
+

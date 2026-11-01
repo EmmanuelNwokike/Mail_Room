@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Record UNKNOWN Package</h2>
+
+<form method="post" action="{{ url_for('new_unknown_package') }}" class="mt-3">
+    <div class="mb-3">
+        <label class="form-label">Name on Package Label</label>
+        <input type="text" name="label_name" class="form-control" placeholder="John Doe (not a resident)" required>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Carrier</label>
+            <select name="carrier" class="form-select" required>
+                <option value="">-- Select Carrier --</option>
+                <option value="FedEx">FedEx</option>
+                <option value="UPS">UPS</option>
+                <option value="USPS">USPS</option>
+                <option value="DHL">DHL</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Tracking Number (optional)</label>
+            <input type="text" name="tracking_number" class="form-control" placeholder="UPS999999">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Save Unknown Package</button>
+    <a href="{{ url_for('pending_packages') }}" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+{% endblock %}
